@@ -1,29 +1,10 @@
 import pygame
+import random
+from setup import *
+
 from office import Office
 from camera import Camera
 
-SCREEN_WIDTH = 980
-SCREEN_HEIGHT = 680
-
-#Defines screen areas in which mouse interaction is possible 
-Q1 = pygame.Rect(0, 0, round(SCREEN_WIDTH / 3), SCREEN_HEIGHT)
-Q2 = pygame.Rect(SCREEN_WIDTH - round(SCREEN_WIDTH / 3), 0, round(SCREEN_WIDTH / 3), SCREEN_HEIGHT)
-Q3 = pygame.Rect(Q1.width * 0.75, SCREEN_HEIGHT * 0.9, SCREEN_WIDTH - Q1.width - Q2.width + (Q1.width * 0.50), SCREEN_HEIGHT * 0.1)
-
-DOOR_HB_L = pygame.Rect(0, SCREEN_HEIGHT*0.4, SCREEN_HEIGHT*0.12, SCREEN_HEIGHT*0.12)
-LIGHT_HB_L = pygame.Rect(0, (SCREEN_HEIGHT*0.4)+(SCREEN_HEIGHT*0.12), SCREEN_HEIGHT*0.12, SCREEN_HEIGHT*0.12)
-
-DOOR_HB_R = pygame.Rect(SCREEN_WIDTH - SCREEN_HEIGHT*0.12, SCREEN_HEIGHT*0.4, SCREEN_HEIGHT*0.12, SCREEN_HEIGHT*0.12)
-LIGHT_HB_R = pygame.Rect(SCREEN_WIDTH - SCREEN_HEIGHT*0.12, (SCREEN_HEIGHT*0.4)+(SCREEN_HEIGHT*0.12), SCREEN_HEIGHT*0.12, SCREEN_HEIGHT*0.12)
-
-CAPTION = "project-fnaf"
-ICON = "assets/foxy.png"
-
-FRAMERATE_CAP = 60
-PLAYER_VEL = 18
-
-#Default color for debugging purposes
-DEFAULT_COLOR = (255, 10, 120)
 
 #Initializes the screen with custom icon and caption
 def init_screen():
@@ -41,12 +22,6 @@ def show_quadrants(screen):
     pygame.draw.rect(screen, (255, 0, 0), Q1, width=5)
     pygame.draw.rect(screen, (255, 0, 0), Q2, width=5)
     pygame.draw.rect(screen, (0, 255, 0), Q3, width=5)
-
-    pygame.draw.rect(screen, (0, 0, 255), DOOR_HB_L, width=5)
-    pygame.draw.rect(screen, (0, 0, 255), LIGHT_HB_L, width=5)
-    pygame.draw.rect(screen, (0, 0, 255), DOOR_HB_R, width=5)
-    pygame.draw.rect(screen, (0, 0, 255), LIGHT_HB_R, width=5)
-
 
 #Displays dynamic mouse coordinates for debbuging purposes
 def show_mouse_coords(screen, font):
@@ -89,8 +64,8 @@ def main():
 
         else:
             office.blit_background(screen, office_bg)
-            office.blit_buttons(screen, lbuttons, rbuttons, office_bg, SCREEN_HEIGHT)
-            office.update_bg_pos(Q1, Q2, PLAYER_VEL)
+            office.blit_buttons(screen, lbuttons, rbuttons, office_bg)
+            office.update_bg_pos()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -105,20 +80,21 @@ def main():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if not camera.on:
-                    if office.mouse_in_hitbox(DOOR_HB_L):
+                    if office.mouse_in_hitbox(office.door_hb_l):
                         office.play_boop()
 
-                    elif office.mouse_in_hitbox(LIGHT_HB_L):
+                    elif office.mouse_in_hitbox(office.light_hb_l):
                         office.play_boop()
 
-                    elif office.mouse_in_hitbox(DOOR_HB_R):
+                    elif office.mouse_in_hitbox(office.door_hb_r):
                         office.play_boop()
 
-                    elif office.mouse_in_hitbox(LIGHT_HB_R):
+                    elif office.mouse_in_hitbox(office.light_hb_r):
                         office.play_boop()
 
         if quadrants:
             show_quadrants(screen)
+            office.show_hitboxes(screen)
 
         if coordinates:
             show_mouse_coords(screen, font)
