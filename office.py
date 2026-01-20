@@ -40,7 +40,8 @@ class Office():
 
     def play_boop(self):
         pygame.mixer.Sound(self.boop).play()
-
+    
+    #Updates office background based on the current mouse position
     def update_bg_pos(self, Q1, Q2, PLAYER_VEL):
         if Q1.collidepoint(pygame.mouse.get_pos()):
             if self.bgx + PLAYER_VEL <= 0:
