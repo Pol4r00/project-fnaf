@@ -40,12 +40,14 @@ def main():
     menu = Menu()
     office = Office()
     camera = Camera()
-    
+        
     menu_bg = menu.load_background()
     ng_button, ng_hitbox = menu.load_ng_button()
 
     office_bg = office.load_background()
     lbuttons, rbuttons = office.load_buttons()
+    door_l_frames = office.get_door_l_frames()
+    door_r_frames = office.get_door_r_frames()
 
     theme = menu.load_theme()
     
@@ -75,11 +77,32 @@ def main():
             camera.blit_background(screen, camera_bg)
 
         else:
-
+                
             office.blit_background(screen, office_bg)
             office.blit_buttons(screen, lbuttons, rbuttons, office_bg)
+
+            if office.door_l_closed:
+                office.play_left_door_anim(screen, door_l_frames)
+
+            else:
+                office.play_left_door_anim(screen, door_l_frames, reverse=True)
+            
+            if office.door_r_closed:
+                office.play_right_door_anim(screen, door_r_frames, office_bg)
+
+            else:
+                office.play_right_door_anim(screen, door_r_frames, office_bg, reverse=True)
+            
             camera.draw_cam_flick(screen)
+            
             office.update_bg_pos()
+            
+            if quadrants:
+                show_quadrants(screen)
+                office.show_hitboxes(screen)
+            
+            if coordinates:
+                show_mouse_coords(screen, font)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -98,31 +121,24 @@ def main():
                         menu.start = True
                         pygame.mixer.music.stop()
 
-                        time.sleep(3)
-
                         office.load_ambiance()
                         office.play_ambiance()
                         office.play_humming()
 
                 elif not camera.on:
                     if office.mouse_in_hitbox(office.door_hb_l):
-                        office.play_error()
+                        office.play_metal_clank()
+                        office.door_l_closed = not office.door_l_closed
 
                     elif office.mouse_in_hitbox(office.light_hb_l):
                         office.play_error()
 
                     elif office.mouse_in_hitbox(office.door_hb_r):
-                        office.play_error()
+                        office.play_metal_clank()
+                        office.door_r_closed = not office.door_r_closed
 
                     elif office.mouse_in_hitbox(office.light_hb_r):
                         office.play_error()
-
-        if quadrants:
-            show_quadrants(screen)
-            office.show_hitboxes(screen)
-
-        if coordinates:
-            show_mouse_coords(screen, font)
 
         pygame.display.flip()
 

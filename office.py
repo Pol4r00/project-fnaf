@@ -13,6 +13,7 @@ class Office():
         self.humming = pygame.mixer.Sound("assets/FNaF 1 Placeholders/sounds/Buzz_Fan_Florescent2.wav")
         self.boop = pygame.mixer.Sound("assets/FNaF 1 Placeholders/sounds/PartyFavorraspyPart_AC01__3.wav")
         self.error = pygame.mixer.Sound("assets/FNaF 1 Placeholders/sounds/error.wav")
+        self.metal_clank = pygame.mixer.Sound("assets/FNaF 1 Placeholders/sounds/SFXBible_12478.wav")
 
         self.rbuttons = "assets/FNaF 1 Placeholders/Office/Door & Lights/R. Light/134.png"
         self.lbuttons = "assets/FNaF 1 Placeholders/Office/Door & Lights/L. Light/122.png"
@@ -21,7 +22,108 @@ class Office():
         self.light_hb_l = pygame.Rect(0, SCREEN_HEIGHT * 0.4 + SCREEN_HEIGHT * 0.12, SCREEN_HEIGHT * 0.12, SCREEN_HEIGHT * 0.12)
         self.door_hb_r = pygame.Rect(SCREEN_WIDTH - SCREEN_HEIGHT * 0.12, SCREEN_HEIGHT * 0.4, SCREEN_HEIGHT * 0.12, SCREEN_HEIGHT * 0.12)
         self.light_hb_r = pygame.Rect(SCREEN_WIDTH - SCREEN_HEIGHT * 0.12, SCREEN_HEIGHT * 0.4 + SCREEN_HEIGHT * 0.12, SCREEN_HEIGHT * 0.12, SCREEN_HEIGHT * 0.12)
+
+        self.door_l_frame = 0
+        self.door_r_frame = 0
+        self.last_up_door_l = pygame.time.get_ticks()
+        self.last_up_door_r = pygame.time.get_ticks()
+
+        self.door_l_closed = False
+        self.door_r_closed = False
+
+    def get_door_l_frames(self):
+        frames = []
+
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/103.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/89.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/91.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/92.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/93.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/94.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/95.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/96.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/97.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/98.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/99.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/100.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/101.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/102.png").convert_alpha())
+
+        return frames
+
+    def get_door_r_frames(self):
+        frames = []
+
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/88.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/106.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/107.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/108.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/109.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/110.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/111.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/112.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/113.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/114.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/115.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/116.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/117.png").convert_alpha())
+        frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/R. Door/118.png").convert_alpha())
         
+        return frames
+
+
+    def play_left_door_anim(self, screen, frames, reverse=False):
+        cooldown = 20
+
+        current_time = pygame.time.get_ticks()
+
+        if not reverse:
+            if self.door_l_frame >= 0:
+                if current_time - self.last_up_door_l >= cooldown:
+                    self.door_l_frame += 1
+                    self.last_up_door_l = current_time
+
+                    if self.door_l_frame >= len(frames):
+                        self.door_l_frame = -1
+
+        else:
+            if self.door_l_frame <= -1:
+                if current_time - self.last_up_door_l >= cooldown:
+                    self.door_l_frame -= 1
+                    self.last_up_door_l = current_time
+
+                    if self.door_l_frame <= -len(frames):
+                        self.door_l_frame = 0
+
+        screen.blit(frames[self.door_l_frame], (self.bgx + SCREEN_HEIGHT * 0.12, 0))
+
+
+    def play_right_door_anim(self, screen, frames, office_bg, reverse=False):
+        cooldown = 20
+
+        current_time = pygame.time.get_ticks()
+
+        if not reverse:
+            if self.door_r_frame >= 0:
+                if current_time - self.last_up_door_r >= cooldown:
+                    self.door_r_frame += 1
+                    self.last_up_door_r = current_time
+
+                    if self.door_r_frame >= len(frames):
+                        self.door_r_frame = -1
+
+        else:
+            if self.door_r_frame <= -1:
+                if current_time - self.last_up_door_r >= cooldown:
+                    self.door_r_frame -= 1
+                    self.last_up_door_r = current_time
+
+                    if self.door_r_frame <= -len(frames):
+                        self.door_r_frame = 0
+
+        screen.blit(frames[self.door_r_frame], (self.bgx + (office_bg.get_width() * 0.78), 0))
+
+
     def load_background(self):
         office_bg = pygame.image.load(self.background)
         return office_bg
@@ -60,6 +162,9 @@ class Office():
 
     def play_error(self):
         self.error.play()
+
+    def play_metal_clank(self):
+        self.metal_clank.play()
     
     #Updates office background based on the current mouse position
     def update_bg_pos(self):

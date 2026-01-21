@@ -1,67 +1,95 @@
 import pygame
 
-pygame.init()
-
 SCREEN_WIDTH = 980
-SCREEN_HEIGHT = 640
+SCREEN_HEIGHT = 680
 
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('project-fnaf')
+def get_frames():
+    frames = []
 
-icon = pygame.image.load("foxy.png")
-pygame.display.set_icon(icon)
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/105.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/89.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/91.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/92.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/93.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/94.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/96.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/97.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/98.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/99.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/100.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/101.png").convert_alpha())
+    frames.append(pygame.image.load("assets/FNaF 1 Placeholders/Office/Door & Lights/L. Door/102.png").convert_alpha())
 
-office = pygame.image.load("office_ph.png")
+    return frames
 
-font = pygame.font.Font(None, size=20)
-
-cams = pygame.image.load("camera_test.png")
-
-run = True
-cams_up = False
-
-clock = pygame.time.Clock()
-
-x = 0
-y = 0
-
-while run:
-    screen.fill((255, 10, 120))
-
-    toggle = pygame.Rect(SCREEN_WIDTH / 3 - 250, 550, 500, 50)
-    pygame.draw.rect(screen, (256, 0, 0), toggle, width=5)
-
-    if toggle.collidepoint(pygame.mouse.get_pos()):
-        cams_up = True
-        while cams_up:
-            screen.blit(cams, (0, 0))
-            if toggle.collidepoint(pygame.mouse.get_pos()):
-                cams_up = False
-    else:
-        screen.blit(office, (x, y))
-
-    mx, my = pygame.mouse.get_pos()
-
-    text_mouse = font.render(f"MOUSE: ({mx}, {my})", True, (255, 255, 255))
-    text_office = font.render(f"OFFICE: ({x}, {y})", True, (255, 255, 255))
-
-    screen.blit(text_mouse, (15, 15))
-    screen.blit(text_office, (15, 35))
+def play_animation(screen, frames, frame=0, last_updated=pygame.time.get_ticks(), reverse=False):
+    cooldown = 50
     
-    if mx > 800:
-        if x - 10 >= -550:
-            x -= 10
+    current_time = pygame.time.get_ticks()
+    
+    if not reverse:
+        if frame >= 0:
+            if current_time - last_updated >= cooldown:
+                frame += 1
+                last_updated = current_time
+        
+                if frame >= len(frames):
+                    frame = -1
 
-    elif mx < 300:
-        if x + 10 <= 0:
-            x += 10
+    else:
+        if frame <= -1:
+            if current_time - last_updated >= cooldown:
+                frame -= 1
+                last_updated = current_time
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+            if frame <= -len(frames):
+                frame = 0
 
-    pygame.display.flip()
 
-    clock.tick(60)
+    screen.blit(frames[frame], (0, 0))
+
+    return frame, last_updated
+
+
+def main():
+    
+    pygame.init()
+
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    run = True
+    
+    frame = 0
+    frames = get_frames()
+    last_updated = pygame.time.get_ticks()
+
+    door_closed = False
+
+    while run:
+        screen.fill((255, 10, 120))
+    
+        #frame, last_updated = play_animation(screen, frames, frame, last_updated)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_u:
+                    door_closed = not door_closed
+
+
+        if door_closed:
+            frame, last_updated = play_animation(screen, frames, frame, last_updated, reverse=False)
+
+        else:
+            frame, last_updated = play_animation(screen, frames, frame, last_updated, reverse=True)
+
+
+
+        pygame.display.flip()
 
 pygame.quit()
+
+
+if __name__ == "__main__":
+    main()
