@@ -12,6 +12,8 @@ ICON = "assets/foxy.png"
 
 FRAMERATE_CAP = 60
 PLAYER_VEL = 18
+ENEMY_VEL = 5000
 
 DEFAULT_COLOR = (255, 10, 120)
+
 

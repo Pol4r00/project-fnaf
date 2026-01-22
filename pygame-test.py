@@ -10,22 +10,37 @@ def main():
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     run = True
-
-    bonnie = Character(2, 20)
-    current_cam = bonnie.starting_cam
+    jumpscare = False
     
+    count = 0
+    foxy = Character(3, 20)
+    current_cam = foxy.starting_cam
 
+    foxy_frames = foxy.get_foxy_frames()
+    
+    
+    clock = pygame.time.Clock()
     while run:
         screen.fill((255, 10, 120))
         
-        current_cam = bonnie.calculate_movement(current_cam)
         
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_u:
+                    jumpscare = True
+                    
+        if jumpscare:
+            foxy.play_jumpscare(screen, foxy_frames)
+
+
 
         pygame.display.flip()
+
+        clock.tick(60)
 
 pygame.quit()
 

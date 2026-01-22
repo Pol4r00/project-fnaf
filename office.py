@@ -158,7 +158,10 @@ class Office():
     
     def play_humming(self):
         self.humming.set_volume(0.5)
-        pygame.mixer.Sound(self.humming).play(-1)
+        self.humming.play(-1)
+
+    def stop_humming(self):
+        self.humming.stop()
 
     def play_error(self):
         self.error.play()

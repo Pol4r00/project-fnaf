@@ -8,6 +8,25 @@ class Camera():
         self.on = False
         self.can_toggle = True
 
+        self.vacant_cameras = {"1a": True,
+                               "1b": True,
+                               "1c (1)": True,
+                               "1c (2)": True,
+                               "1c (3)": True,
+                               "2a": True,
+                               "2b": True,
+                               "3": True,
+                               "4a": True,
+                               "4b": True,
+                               "5": True,
+                               "6": True,
+                               "7": True,
+                               "K Right Hall": True,
+                               "K Left Hall": True,
+                               "K Left Corridor": True,
+                               "O": True
+                            }
+
     def load_background(self):
         camera_bg = pygame.image.load(self.background)
         return camera_bg
@@ -29,3 +48,7 @@ class Camera():
 
         else:
             self.can_toggle = True
+
+    def reset_cameras(self):
+        for cam in self.vacant_cameras:
+            self.vacant_cameras[cam] = True
