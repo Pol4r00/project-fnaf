@@ -41,12 +41,9 @@ def main():
     menu = Menu()
     office = Office()
     camera = Camera()
-
-    freddy = Character(0, 5)
-    bonnie = Character(1, 5)
-    chica = Character(2, 5)
-    foxy = Character(3, 5)
- 
+    bonnie = Character(1, 20)
+    chica = Character(2, 20)
+        
     menu_bg = menu.load_background()
     ng_button, ng_hitbox = menu.load_ng_button()
 
@@ -65,12 +62,8 @@ def main():
     coordinates = False
     run = True
 
-    last_printed = pygame.time.get_ticks()
-    
-    freddy_current_cam = freddy.starting_cam
     bonnie_current_cam = bonnie.starting_cam
     chica_current_cam = chica.starting_cam
-    foxy_current_cam = foxy.starting_cam
 
     clock = pygame.time.Clock()
 
@@ -110,17 +103,10 @@ def main():
                 camera.draw_cam_flick(screen)
             
                 office.update_bg_pos()
-
-                current_time = pygame.time.get_ticks()
                 
-                if current_time - last_printed >= 5000:
-                    print("--------------------------")
-                    last_printed = current_time
-
-                freddy_current_cam = freddy.calculate_movement(freddy_current_cam)
                 bonnie_current_cam = bonnie.calculate_movement(bonnie_current_cam)
                 chica_current_cam = chica.calculate_movement(chica_current_cam)
-                foxy_current_cam = foxy.calculate_movement(foxy_current_cam)
+                
             
             if quadrants:
                 show_quadrants(screen)
