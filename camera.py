@@ -3,7 +3,7 @@ from setup import Q3
 
 class Camera():
     def __init__(self):
-        self.background = "assets/FNaF 1 Placeholders/Locations/East Hall/67.png"
+        self.background = "assets/camera_ph.png"
         self.cam_flick = "assets/FNaF 1 Placeholders/Other/420.png"
         self.on = False
         self.can_toggle = True
