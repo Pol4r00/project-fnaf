@@ -29,6 +29,7 @@ class Menu():
 
     def load_background(self):
         menu_bg = pygame.image.load(self.background)
+        menu_bg = pygame.transform.scale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         return menu_bg
     
     def blit_background(self, screen, menu_bg):

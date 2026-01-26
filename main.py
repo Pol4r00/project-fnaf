@@ -95,7 +95,7 @@ def main():
                     if foxy_current_cam == "O": 
                         foxy.play_scream()
                         if foxy.jumpscare_frame >= 0:
-                            foxy.play_jumpscare(screen, foxy_frames)
+                            foxy.play_jumpscare(screen, foxy_frames, office)
 
                         else:
                             foxy.jumpscare_frame = 0
@@ -104,7 +104,7 @@ def main():
                     elif freddy_current_cam == "O":
                         freddy.play_scream()
                         if freddy.jumpscare_frame >= 0:
-                            freddy.play_jumpscare(screen, freddy_frames)
+                            freddy.play_jumpscare(screen, freddy_frames, office)
 
                         else:
                             freddy.jumpscare_frame = 0
@@ -113,7 +113,7 @@ def main():
                     elif bonnie_current_cam == "O":
                         bonnie.play_scream()
                         if bonnie.jumpscare_frame >= 0:
-                            bonnie.play_jumpscare(screen, bonnie_frames)
+                            bonnie.play_jumpscare(screen, bonnie_frames, office)
 
                         else:
                             bonnie.jumpscare_frame = 0
@@ -122,7 +122,7 @@ def main():
                     elif chica_current_cam == "O":
                         chica.play_scream()
                         if chica.jumpscare_frame >= 0:
-                            chica.play_jumpscare(screen, chica_frames)
+                            chica.play_jumpscare(screen, chica_frames, office)
 
                         else:
                             chica.jumpscare_frame = 0
@@ -152,6 +152,9 @@ def main():
 
                 elif event.key == pygame.K_i:
                     coordinates = not coordinates
+
+                elif event.key == pygame.K_ESCAPE:
+                    run = False
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if not menu.start:
@@ -180,7 +183,6 @@ def main():
 
             if event.type == GAME_OVER:
                     
-                    foxy.play_jumpscare(screen, foxy_frames)
                     office.play_boop()
                     office.stop_humming()
                     menu.stop_theme()
@@ -204,7 +206,7 @@ def main():
 
 #Initializes the screen with custom icon and caption
 def init_screen():
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
 
     icon = pygame.image.load(ICON)
 

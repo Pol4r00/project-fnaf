@@ -126,6 +126,7 @@ class Office():
 
     def load_background(self):
         office_bg = pygame.image.load(self.background)
+        office_bg = pygame.transform.scale_by(office_bg, 1.15)
         return office_bg
 
     def blit_background(self, screen, office_bg):
@@ -176,7 +177,7 @@ class Office():
                 self.bgx += PLAYER_VEL
 
         elif Q2.collidepoint(pygame.mouse.get_pos()):
-            if self.bgx + PLAYER_VEL >= (-Q2.width) * 1.8:
+            if self.bgx + PLAYER_VEL >= (-Q2.width) * 0.95:
                 self.bgx -= PLAYER_VEL
     
     def mouse_in_hitbox(self, hitbox):

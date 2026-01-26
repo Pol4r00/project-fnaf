@@ -191,13 +191,13 @@ class Character():
         
         return frames
     
-    def play_jumpscare(self, screen, frames):
+    def play_jumpscare(self, screen, frames, office):
         cooldown = 20
 
         current_time = pygame.time.get_ticks()
         
         try:
-            screen.blit(frames[self.jumpscare_frame], (0, 0))
+            screen.blit(frames[self.jumpscare_frame], (office.bgx, office.bgy))
 
         except IndexError:
             print(self.jumpscare_frame)
@@ -222,7 +222,6 @@ class Character():
             enemy_vel = enemy_vel * 2
 
         if current_time - self.move_timer >= enemy_vel:
-            print(f"{self.character_name}: Cam {current_cam}")
             random_num = random.randint(1, 20)
 
             if current_cam == self.killcam and not door_closed:

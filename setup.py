@@ -1,7 +1,11 @@
 import pygame
 
-SCREEN_WIDTH = 980
-SCREEN_HEIGHT = 680
+pygame.init()
+
+MONITOR = pygame.display.Info()
+
+SCREEN_WIDTH = MONITOR.current_w
+SCREEN_HEIGHT = MONITOR.current_h
 
 Q1 = pygame.Rect(0, 0, round(SCREEN_WIDTH / 3), SCREEN_HEIGHT)
 Q2 = pygame.Rect(SCREEN_WIDTH - round(SCREEN_WIDTH / 3), 0, round(SCREEN_WIDTH / 3), SCREEN_HEIGHT)
